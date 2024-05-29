@@ -1,108 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Choropleth Map of Global GDP</title>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-    <style>
-        .tooltip {
-            position: absolute;
-            text-align: center;
-            padding: 8px;
-            font: 12px sans-serif;
-            background: lightsteelblue;
-            border: 0px;
-            border-radius: 8px;
-            pointer-events: none;
-        }
-    </style>
-</head>
-<body>
-    <h1>Global GDP Choropleth Map</h1>
-    <div id="map"></div>
-    <script>
-        // Set dimensions
-        const width = 960, height = 600;
+<meta charset="utf-8">
+<style>
+  .countries {
+    fill: none;
+    stroke: #fff;
+    stroke-linejoin: round;
+  }
+  .legendThreshold {
+      font-size: 12px;
+      font-family: sans-serif;
+  }
+  .caption {
+      fill: #000;
+      text-anchor: start;
+      font-weight: bold;
+  }
+</style>
+<svg width="960" height="600"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
+<script>
+// The svg
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
 
-        // Create SVG element
-        const svg = d3.select("#map")
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height);
+// Map and projection
+var path = d3.geoPath();
+var projection = d3.geoNaturalEarth()
+    .scale(width / 2 / Math.PI)
+    .translate([width / 2, height / 2]);
+var path = d3.geoPath()
+    .projection(projection);
 
-        // Projection and path
-        const projection = d3.geoMercator()
-            .scale(150)
-            .translate([width / 2, height / 1.5]);
-        
-        const path = d3.geoPath().projection(projection);
+// Data and color scale
+var data = d3.map();
+var colorScheme = d3.schemeBlues[6];
+colorScheme.unshift("#eee");
+var colorScale = d3.scaleThreshold()
+    .domain([1000, 5000, 10000, 20000, 50000, 100000])
+    .range(colorScheme);
 
-        // Tooltip for displaying data
-        const tooltip = d3.select("body").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
+// Legend
+var g = svg.append("g")
+    .attr("class", "legendThreshold")
+    .attr("transform", "translate(20,20)");
+g.append("text")
+    .attr("class", "caption")
+    .attr("x", 0)
+    .attr("y", -6)
+    .text("GDP per Capita (USD)");
+var labels = ['< 1000', '1000-4999', '5000-9999', '10000-19999', '20000-49999', '50000-99999', '> 100000'];
+var legend = d3.legendColor()
+    .labels(function (d) { return labels[d.i]; })
+    .shapePadding(4)
+    .scale(colorScale);
+svg.select(".legendThreshold")
+    .call(legend);
 
-        // Load data and map
-        Promise.all([
-            d3.json("https://d3js.org/world-50m.v1.json"),
-            d3.csv("path/to/Tidy_GDP_Data.csv")
-        ]).then(function([world, data]) {
-            const gdpById = {};
-            data.forEach(d => {
-                gdpById[d.Country] = +d["2022"];
+// Load external data and boot
+d3.queue()
+    .defer(d3.json, "https://d3js.org/world-110m.v1.json")
+    .defer(d3.csv, "path/to/Tidy_GDP_Data.csv", function(d) { data.set(d.Country, +d["2022"]); })
+    .await(ready);
+
+function ready(error, world) {
+    if (error) throw error;
+
+    // Draw the map
+    svg.append("g")
+        .attr("class", "countries")
+        .selectAll("path")
+        .data(topojson.feature(world, world.objects.countries).features)
+        .enter().append("path")
+            .attr("fill", function (d){
+                // Pull data for this country
+                d.total = data.get(d.properties.name) || 0;
+                // Set the color
+                return colorScale(d.total);
+            })
+            .attr("d", path)
+            .on("mouseover", function(event, d) {
+                d3.select(this).style("stroke", "#000").style("stroke-width", 2);
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this).style("stroke", "#fff").style("stroke-width", 1);
             });
-
-            // Define color scale
-            const color = d3.scaleSequential(d3.interpolateBlues)
-                .domain([0, d3.max(data, d => +d["2022"])]);
-
-            // Draw map
-            svg.append("g")
-                .selectAll("path")
-                .data(topojson.feature(world, world.objects.countries).features)
-                .enter().append("path")
-                .attr("d", path)
-                .attr("fill", d => color(gdpById[d.properties.name]))
-                .on("mouseover", function(event, d) {
-                    d3.select(this).transition().duration(200).style("opacity", .9);
-                    tooltip.transition().duration(200).style("opacity", .9);
-                    tooltip.html(d.properties.name + "<br/>" + gdpById[d.properties.name])
-                        .style("left", (event.pageX) + "px")
-                        .style("top", (event.pageY - 28) + "px");
-                })
-                .on("mouseout", function(d) {
-                    d3.select(this).transition().duration(500).style("opacity", 1);
-                    tooltip.transition().duration(500).style("opacity", 0);
-                });
-
-            // Add a legend
-            const legend = svg.append("g")
-                .attr("class", "legend")
-                .attr("transform", "translate(20,20)");
-
-            const legendScale = d3.scaleLinear()
-                .domain([0, d3.max(data, d => +d["2022"])])
-                .range([0, 300]);
-
-            const legendAxis = d3.axisBottom(legendScale)
-                .ticks(10)
-                .tickFormat(d3.format(".1s"));
-
-            legend.selectAll("rect")
-                .data(d3.range(0, d3.max(data, d => +d["2022"]), d3.max(data, d => +d["2022"]) / 10))
-                .enter().append("rect")
-                .attr("x", d => legendScale(d))
-                .attr("y", 0)
-                .attr("width", 30)
-                .attr("height", 10)
-                .attr("fill", d => color(d));
-
-            legend.append("g")
-                .attr("transform", "translate(0,10)")
-                .call(legendAxis);
-        }).catch(function(error) {
-            console.error(error);
-        });
-    </script>
-</body>
-</html>
+}
+</script>
