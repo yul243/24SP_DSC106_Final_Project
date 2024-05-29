@@ -2,16 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US Household Income Visualization</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Choropleth Map of Global GDP</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://d3-geomap.github.io/d3-geomap/dist/d3-geomap.min.js"></script>
+    <link rel="stylesheet" href="https://d3-geomap.github.io/d3-geomap/dist/d3-geomap.min.css">
+    <style>
+        #map {
+            width: 960px;
+            height: 600px;
+        }
+    </style>
 </head>
 <body>
-    <h1>US Household Income Visualization</h1>
+    <h1>Global GDP Choropleth Map</h1>
     <div id="map"></div>
+<<<<<<< HEAD
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
 
+=======
+    <script>
+        // Function to format the data
+        var format = function(d) {
+            d = d / 1000000;
+            return d3.format(',.02f')(d) + 'M';
+        }
+
+        // Create the map
+        var map = d3.geomap.choropleth()
+            .geofile('https://d3-geomap.github.io/d3-geomap/topojson/world/countries.json')
+            .colors(d3.schemeYlGnBu[9])
+            .column('2022')
+            .format(format)
+            .legend(true)
+            .unitId('Country');
+
+        // Load the data and draw the map
+        d3.csv('Tidy_GDP_Data.csv').then(data => {
+            var selection = d3.select('#map').datum(data);
+            map.draw(selection);
+        });
+    </script>
+</body>
+</html>
+>>>>>>> 02a05b3e9e6bfb31138854fd6d5182aefab687d7
