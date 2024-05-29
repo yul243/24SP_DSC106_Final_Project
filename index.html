@@ -1,1 +1,108 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Choropleth Map of Global GDP</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 8px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Global GDP Choropleth Map</h1>
+    <div id="map"></div>
+    <script>
+        // Set dimensions
+        const width = 960, height = 600;
+
+        // Create SVG element
+        const svg = d3.select("#map")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        // Projection and path
+        const projection = d3.geoMercator()
+            .scale(150)
+            .translate([width / 2, height / 1.5]);
+        
+        const path = d3.geoPath().projection(projection);
+
+        // Tooltip for displaying data
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        // Load data and map
+        Promise.all([
+            d3.json("https://d3js.org/world-50m.v1.json"),
+            d3.csv("path/to/Tidy_GDP_Data.csv")
+        ]).then(function([world, data]) {
+            const gdpById = {};
+            data.forEach(d => {
+                gdpById[d.Country] = +d["2022"];
+            });
+
+            // Define color scale
+            const color = d3.scaleSequential(d3.interpolateBlues)
+                .domain([0, d3.max(data, d => +d["2022"])]);
+
+            // Draw map
+            svg.append("g")
+                .selectAll("path")
+                .data(topojson.feature(world, world.objects.countries).features)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("fill", d => color(gdpById[d.properties.name]))
+                .on("mouseover", function(event, d) {
+                    d3.select(this).transition().duration(200).style("opacity", .9);
+                    tooltip.transition().duration(200).style("opacity", .9);
+                    tooltip.html(d.properties.name + "<br/>" + gdpById[d.properties.name])
+                        .style("left", (event.pageX) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function(d) {
+                    d3.select(this).transition().duration(500).style("opacity", 1);
+                    tooltip.transition().duration(500).style("opacity", 0);
+                });
+
+            // Add a legend
+            const legend = svg.append("g")
+                .attr("class", "legend")
+                .attr("transform", "translate(20,20)");
+
+            const legendScale = d3.scaleLinear()
+                .domain([0, d3.max(data, d => +d["2022"])])
+                .range([0, 300]);
+
+            const legendAxis = d3.axisBottom(legendScale)
+                .ticks(10)
+                .tickFormat(d3.format(".1s"));
+
+            legend.selectAll("rect")
+                .data(d3.range(0, d3.max(data, d => +d["2022"]), d3.max(data, d => +d["2022"]) / 10))
+                .enter().append("rect")
+                .attr("x", d => legendScale(d))
+                .attr("y", 0)
+                .attr("width", 30)
+                .attr("height", 10)
+                .attr("fill", d => color(d));
+
+            legend.append("g")
+                .attr("transform", "translate(0,10)")
+                .call(legendAxis);
+        }).catch(function(error) {
+            console.error(error);
+        });
+    </script>
+</body>
+</html>
