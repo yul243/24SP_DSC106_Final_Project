@@ -33,7 +33,7 @@
             .unitId('Country');
 
         // Load the data and draw the map
-        d3.csv('path/to/Tidy_GDP_Data.csv').then(data => {
+        d3.csv('Tidy_GDP_Data.csv').then(data => {
             var selection = d3.select('#map').datum(data);
             map.draw(selection);
         });
