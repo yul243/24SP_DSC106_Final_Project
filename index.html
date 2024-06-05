@@ -9,21 +9,28 @@
             font-family: Arial, sans-serif;
         }
         .state {
-            fill: #ccc;
             stroke: #fff;
             stroke-width: 1;
         }
         .state:hover {
             fill: orange;
         }
+        .legend {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+        }
+        .legend rect {
+            stroke: #ccc;
+            stroke-width: 1px;
+        }
     </style>
 </head>
 <body>
     <h1>US State GDP</h1>
     <div id="map"></div>
+    <div id="legend"></div>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/topojson@3"></script>
-    <script src="https://unpkg.com/us-atlas/states-10m.json"></script>
     <script src="script.js"></script>
 </body>
 </html>
