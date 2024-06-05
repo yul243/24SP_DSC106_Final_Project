@@ -11,7 +11,8 @@ var map = d3.geomap.choropleth()
 d3.csv('Table.csv').then(data => {
     // Ensure the 'fips' column matches the expected format in the GeoJSON
     data.forEach(d => {
-        d.fips = d.GeoFips.padStart(5, '0'); // Ensures fips codes are 5 characters long
+        d.fips = d.fips.padStart(5, '0'); // Ensures fips codes are 5 characters long
     });
+    console.log(data); // Debugging line to check if data is loaded correctly
     map.draw(d3.select('#map').datum(data));
 });
