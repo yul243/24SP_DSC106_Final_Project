@@ -29,7 +29,7 @@ d3.csv("Table.csv").then(function(data) {
 
     // Create color scale
     const color = d3.scaleQuantize()
-        .domain([d3.min(data, d => +d["2023"]), d3.max(data, d => +d["2023"])])
+        .domain(d3.extent(data, d => +d["2023"]))
         .range(d3.schemeBlues[9]);
 
     // Load and display the map
@@ -40,7 +40,10 @@ d3.csv("Table.csv").then(function(data) {
             .enter().append("path")
             .attr("class", "state")
             .attr("d", path)
-            .attr("fill", d => color(incomeData[d.id]))
+            .attr("fill", d => {
+                const value = incomeData[d.id];
+                return value ? color(value) : "#ccc"; // Use default color if no data
+            })
             .on("mouseover", function(event, d) {
                 d3.select(this).style("fill", "orange");
                 tooltip.transition()
@@ -51,7 +54,8 @@ d3.csv("Table.csv").then(function(data) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                d3.select(this).style("fill", color(incomeData[d.id]));
+                const value = incomeData[d.id];
+                d3.select(this).style("fill", value ? color(value) : "#ccc");
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
