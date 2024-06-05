@@ -1,6 +1,6 @@
 // Set up the choropleth map
 var map = d3.geomap.choropleth()
-    .geofile('https://unpkg.com/d3-geomap@2.1.0/dist/topojson/countries/USA.json')
+    .geofile('https://d3-geomap.github.io/d3-geomap/map/json/usa.json')
     .projection(d3.geoAlbersUsa)
     .column('1998')
     .unitId('fips')
