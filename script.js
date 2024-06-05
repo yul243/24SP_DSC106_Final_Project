@@ -14,18 +14,47 @@ const projection = d3.geoAlbersUsa()
 
 const path = d3.geoPath().projection(projection);
 
-// Load and display the map
-d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
-    svg.append("g")
-        .selectAll("path")
-        .data(topojson.feature(us, us.objects.states).features)
-        .enter().append("path")
-        .attr("class", "state")
-        .attr("d", path)
-        .on("mouseover", function(event, d) {
-            d3.select(this).style("fill", "orange");
-        })
-        .on("mouseout", function(event, d) {
-            d3.select(this).style("fill", "#ccc");
-        });
+// Create a tooltip
+const tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+// Load and process data
+d3.csv("Table.csv").then(function(data) {
+    // Map data to state fips code
+    const incomeData = {};
+    data.forEach(d => {
+        incomeData[d.fips] = +d["2023"];
+    });
+
+    // Create color scale
+    const color = d3.scaleQuantize()
+        .domain([d3.min(data, d => +d["2023"]), d3.max(data, d => +d["2023"])])
+        .range(d3.schemeBlues[9]);
+
+    // Load and display the map
+    d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
+        svg.append("g")
+            .selectAll("path")
+            .data(topojson.feature(us, us.objects.states).features)
+            .enter().append("path")
+            .attr("class", "state")
+            .attr("d", path)
+            .attr("fill", d => color(incomeData[d.id]))
+            .on("mouseover", function(event, d) {
+                d3.select(this).style("fill", "orange");
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html(d.properties.name + "<br>" + incomeData[d.id])
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this).style("fill", color(incomeData[d.id]));
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+    });
 });
