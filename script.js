@@ -24,7 +24,8 @@ d3.csv("Table.csv").then(function(data) {
     // Map data to state fips code
     const incomeData = {};
     data.forEach(d => {
-        incomeData[d.fips] = +d["2023"];
+        // Convert FIPS to a consistent format
+        incomeData[d.fips.padStart(5, '0')] = +d["2023"];
     });
 
     // Debugging: Log incomeData to verify
@@ -51,8 +52,9 @@ d3.csv("Table.csv").then(function(data) {
             .attr("class", "state")
             .attr("d", path)
             .attr("fill", d => {
-                const value = incomeData[d.id];
-                console.log("FIPS:", d.id, "Value:", value); // Log each FIPS code and value
+                // Pad state IDs to match FIPS codes in incomeData
+                const value = incomeData[d.id.padStart(5, '0')];
+                console.log("FIPS:", d.id.padStart(5, '0'), "Value:", value); // Log each FIPS code and value
                 return value ? color(value) : "#ccc"; // Use default color if no data
             })
             .on("mouseover", function(event, d) {
@@ -60,13 +62,15 @@ d3.csv("Table.csv").then(function(data) {
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                const income = incomeData[d.id];
+                // Pad state IDs to match FIPS codes in incomeData
+                const income = incomeData[d.id.padStart(5, '0')];
                 tooltip.html(d.properties.name + "<br>" + (income !== undefined ? income : "No data"))
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                const value = incomeData[d.id];
+                // Pad state IDs to match FIPS codes in incomeData
+                const value = incomeData[d.id.padStart(5, '0')];
                 d3.select(this).style("fill", value ? color(value) : "#ccc");
                 tooltip.transition()
                     .duration(500)
