@@ -20,14 +20,14 @@
         }
 
         var map = d3.geomap.choropleth()
-            .geofile('https://d3-geomap.github.io/d3-geomap/topojson/countries/USA.json')
+            .geofile('USA.json')
             .projection(d3.geoAlbersUsa)
             .column('2023') // Change this to the desired year column
             .unitId('fips')
             .scale(1000)
             .legend(true);
 
-        d3.csv('/path/to/tables.csv').then(data => {
+        d3.csv('tables.csv').then(data => {
             var selection = d3.select('#map').datum(data);
             map.draw(selection);
         });
