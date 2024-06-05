@@ -38,8 +38,23 @@ Promise.all([
         .selectAll("path")
         .data(topojson.feature(us, us.objects.states).features)
         .join("path")
-        .attr("fill", d => color(dataMap[d.id]))
+        .attr("fill", d => {
+            const fips = d.id;
+            const value = dataMap[fips];
+            if (value) {
+                return color(value);
+            } else {
+                console.log(`No data for FIPS: ${fips}`);
+                return '#ccc'; // Use grey color if no data
+            }
+        })
         .attr("d", path)
         .append("title")
-        .text(d => `State: ${d.properties.name}\nIncome: ${dataMap[d.id]}`);
+        .text(d => {
+            const fips = d.id;
+            const income = dataMap[fips] ? dataMap[fips] : 'No data';
+            return `State: ${d.properties.name}\nIncome: ${income}`;
+        });
+}).catch(error => {
+    console.error('Error loading the data:', error);
 });
