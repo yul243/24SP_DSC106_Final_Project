@@ -2,35 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US State GDP</title>
+    <title>US Choropleth Map</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
         .state {
             stroke: #fff;
             stroke-width: 1;
         }
-        .state:hover {
-            fill: orange;
-        }
-        .legend {
-            font-family: Arial, sans-serif;
-            font-size: 10px;
-        }
-        .legend rect {
-            stroke: #ccc;
-            stroke-width: 1px;
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: 80px;
+            height: 28px;
+            padding: 2px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-    <h1>United States Personal Income Per Capita</h1>
-    <div id="map"></div>
-    <div id="legend"></div>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://unpkg.com/topojson@3"></script>
-    <script src="script.js"></script>
+    <script>
+        // Set up the SVG element and dimensions
+        const width = 960;
+        const height = 600;
+
+        const svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const path = d3.geoPath();
+
+        // Define a color scale
+        const color = d3.scaleQuantize()
+            .domain([20000, 80000]) // Adjust domain based on your data range
+            .range(d3.schemeBlues[9]);
+
+        // Tooltip
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        // Load and process data
+        Promise.all([
+            d3.json("https://d3js.org/us-10m.v1.json"),
+            d3.csv("table.csv", function(d) {
+                return {
+                    id: d.GeoFips,
+                    state: d.GeoName,
+                    value: +d["1998"]
+                };
+            })
+        ]).then(function([us, data]) {
+            const dataMap = new Map(data.map(d => [d.id, d.value]));
+
+            // Draw the map
+            svg.append("g")
+                .attr("class", "states")
+              .selectAll("path")
+                .data(topojson.feature(us, us.objects.states).features)
+              .enter().append("path")
+                .attr("class", "state")
+                .attr("d", path)
+                .style("fill", function(d) {
+                    return color(dataMap.get(d.id) || 0);
+                })
+                .on("mouseover", function(event, d) {
+                    const value = dataMap.get(d.id) || 0;
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip.html(d.properties.name + "<br/>" + value)
+                        .style("left", (event.pageX) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function(d) {
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
+
+            svg.append("path")
+                .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+                .attr("class", "state-borders")
+                .attr("d", path);
+        }).catch(function(error) {
+            console.error('Error loading or processing data:', error);
+        });
+    </script>
 </body>
 </html>
