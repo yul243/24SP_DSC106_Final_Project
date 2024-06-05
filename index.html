@@ -21,9 +21,9 @@
     <h1>Choropleth Map: US States</h1>
     <div id="map"></div>
     <script>
-        var map = d3.geomap.choropleth()
+        var map = d3.geomap()
             .geofile('USA.json')
-            .projection(d3.geoAlbersUsa)
+            .projection(d3.geoAlbersUsa())
             .column('2012')
             .unitId('fips')
             .scale(1000)
