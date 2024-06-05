@@ -27,7 +27,7 @@ Promise.all([
     // Process the CSV data
     const dataMap = {};
     data.forEach(d => {
-        dataMap[d.fips] = +d["2023"]; // Using 2023 data
+        dataMap[d.State] = +d["2023"]; // Using state names instead of FIPS
     });
 
     // Set the domain of the color scale
@@ -39,21 +39,21 @@ Promise.all([
         .data(topojson.feature(us, us.objects.states).features)
         .join("path")
         .attr("fill", d => {
-            const fips = d.id;
-            const value = dataMap[fips];
+            const stateName = d.properties.name;
+            const value = dataMap[stateName];
             if (value) {
                 return color(value);
             } else {
-                console.log(`No data for FIPS: ${fips}`);
+                console.log(`No data for State: ${stateName}`);
                 return '#ccc'; // Use grey color if no data
             }
         })
         .attr("d", path)
         .append("title")
         .text(d => {
-            const fips = d.id;
-            const income = dataMap[fips] ? dataMap[fips] : 'No data';
-            return `State: ${d.properties.name}\nIncome: ${income}`;
+            const stateName = d.properties.name;
+            const income = dataMap[stateName] ? dataMap[stateName] : 'No data';
+            return `State: ${stateName}\nIncome: ${income}`;
         });
 }).catch(error => {
     console.error('Error loading the data:', error);
