@@ -19,7 +19,7 @@
             return d3.format(',.02f')(d);
         }
 
-        var map = d3.geomap.choropleth()
+        var map = d3.choropleth()
             .geofile('https://d3-geomap.github.io/d3-geomap/topojson/countries/USA.json')
             .projection(d3.geoAlbersUsa)
             .column('2023') // Change this to the desired year column
