@@ -52,6 +52,7 @@ d3.csv("Table.csv").then(function(data) {
             .attr("d", path)
             .attr("fill", d => {
                 const value = incomeData[d.id];
+                console.log("FIPS:", d.id, "Value:", value); // Log each FIPS code and value
                 return value ? color(value) : "#ccc"; // Use default color if no data
             })
             .on("mouseover", function(event, d) {
