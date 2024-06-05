@@ -21,7 +21,7 @@ const tooltip = d3.select("body").append("div")
 
 // Load and process data
 d3.csv("Table.csv").then(function(data) {
-    // Map data to state names
+    // Map data to state names and FIPS codes
     const incomeData = {};
     data.forEach(d => {
         incomeData[d.State] = +d["2023"];
@@ -41,7 +41,7 @@ d3.csv("Table.csv").then(function(data) {
 
         // Debugging: Log state data to verify FIPS codes
         states.forEach(d => {
-            console.log("State Name:", d.properties.name);
+            console.log("State Name:", d.properties.name, "State ID:", d.id);
         });
 
         svg.append("g")
