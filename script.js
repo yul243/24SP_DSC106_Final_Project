@@ -35,7 +35,8 @@ d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
             .enter().append("path")
             .attr("class", "state")
             .attr("d", path)
-            .style("fill", d => {
+            .attr("id", d => d.id) // Add id for debugging
+            .style("fill", function(d) {
                 const gdp = gdpData[d.id];
                 console.log("State ID:", d.id, "GDP:", gdp); // Debugging line
                 return gdp ? color(gdp) : "#ccc";
@@ -44,7 +45,7 @@ d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
                 d3.select(this).style("fill", "orange");
             })
             .on("mouseout", function(event, d) {
-                d3.select(this).style("fill", d => {
+                d3.select(this).style("fill", function(d) {
                     const gdp = gdpData[d.id];
                     return gdp ? color(gdp) : "#ccc";
                 });
