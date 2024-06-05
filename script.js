@@ -24,12 +24,11 @@ d3.csv("Table.csv").then(function(data) {
     // Map data to state fips code
     const incomeData = {};
     data.forEach(d => {
-        // Ensure the FIPS code is correctly formatted as a string
-        incomeData[d.fips.padStart(5, '0')] = +d["2023"];
+        incomeData[d.fips] = +d["2023"];
     });
 
     // Debugging: Log incomeData to verify
-    console.log(incomeData);
+    console.log("Income Data:", incomeData);
 
     // Create color scale
     const color = d3.scaleQuantize()
@@ -38,14 +37,21 @@ d3.csv("Table.csv").then(function(data) {
 
     // Load and display the map
     d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
+        const states = topojson.feature(us, us.objects.states).features;
+
+        // Debugging: Log state data to verify FIPS codes
+        states.forEach(d => {
+            console.log("State ID:", d.id, "Name:", d.properties.name);
+        });
+
         svg.append("g")
             .selectAll("path")
-            .data(topojson.feature(us, us.objects.states).features)
+            .data(states)
             .enter().append("path")
             .attr("class", "state")
             .attr("d", path)
             .attr("fill", d => {
-                const value = incomeData[d.id.padStart(5, '0')];
+                const value = incomeData[d.id];
                 return value ? color(value) : "#ccc"; // Use default color if no data
             })
             .on("mouseover", function(event, d) {
@@ -53,13 +59,13 @@ d3.csv("Table.csv").then(function(data) {
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                const income = incomeData[d.id.padStart(5, '0')];
+                const income = incomeData[d.id];
                 tooltip.html(d.properties.name + "<br>" + (income !== undefined ? income : "No data"))
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                const value = incomeData[d.id.padStart(5, '0')];
+                const value = incomeData[d.id];
                 d3.select(this).style("fill", value ? color(value) : "#ccc");
                 tooltip.transition()
                     .duration(500)
