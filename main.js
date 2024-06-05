@@ -24,6 +24,8 @@ Promise.all([
     d3.json("https://d3js.org/us-10m.v1.json"),
     d3.csv("Table.csv")
 ]).then(([us, data]) => {
+    console.log(us); // Inspect the structure of the GeoJSON file
+
     // Process the CSV data
     const dataMap = {};
     data.forEach(d => {
@@ -39,6 +41,9 @@ Promise.all([
         .data(topojson.feature(us, us.objects.states).features)
         .join("path")
         .attr("fill", d => {
+            // Log the properties of each state
+            console.log(d.properties);
+
             const stateName = d.properties.name;
             const value = dataMap[stateName];
             if (value) {
