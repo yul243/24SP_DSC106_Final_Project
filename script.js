@@ -27,6 +27,8 @@ d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
             gdpData[d.GeoFips] = +d["1998"]; // Use 1998 data
         });
 
+        console.log("GDP Data:", gdpData); // Debugging line
+
         svg.append("g")
             .selectAll("path")
             .data(topojson.feature(us, us.objects.states).features)
@@ -35,6 +37,7 @@ d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
             .attr("d", path)
             .style("fill", d => {
                 const gdp = gdpData[d.id];
+                console.log("State ID:", d.id, "GDP:", gdp); // Debugging line
                 return gdp ? color(gdp) : "#ccc";
             })
             .on("mouseover", function(event, d) {
@@ -79,5 +82,9 @@ d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
         legend.append("g")
             .attr("transform", `translate(0, ${legendHeight})`)
             .call(xAxis);
+    }).catch(function(error) {
+        console.error('Error loading CSV data:', error);
     });
+}).catch(function(error) {
+    console.error('Error loading JSON data:', error);
 });
