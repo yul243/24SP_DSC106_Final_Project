@@ -3,23 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US State GDP</title>
+    <title>US State Personal Income Per Capita</title>
     <style>
         body {
             font-family: Arial, sans-serif;
         }
         .state {
-            fill: #ccc;
             stroke: #fff;
             stroke-width: 1;
         }
         .state:hover {
             fill: orange;
         }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: 80px;
+            height: 28px;
+            padding: 2px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
-    <h1>US State GDP</h1>
+    <h1>US State Personal Income Per Capita</h1>
     <div id="map"></div>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/topojson@3"></script>
