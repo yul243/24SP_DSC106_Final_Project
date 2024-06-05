@@ -3,34 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US State GDP</title>
+    <title>US Choropleth Map</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://d3-geomap.github.io/d3-geomap/dist/d3-geomap.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
         }
-        .state {
-            stroke: #fff;
-            stroke-width: 1;
-        }
-        .state:hover {
-            fill: orange;
-        }
-        .legend {
-            font-family: Arial, sans-serif;
-            font-size: 10px;
-        }
-        .legend rect {
-            stroke: #ccc;
-            stroke-width: 1px;
+        #map {
+            width: 800px;
+            height: 600px;
+            margin: auto;
         }
     </style>
-    <link rel="stylesheet" href="https://d3-geomap.github.io/d3-geomap/map/css/d3-geomap.css">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://d3-geomap.github.io/d3-geomap/map/js/d3-geomap.min.js"></script>
 </head>
 <body>
-    <h1>United States Personal Income Per Capita</h1>
+    <h1>Choropleth Map: US States</h1>
     <div id="map"></div>
-    <script src="script.js"></script>
+    <script>
+        var map = d3.geomap.choropleth()
+            .geofile('USA.json')
+            .projection(d3.geoAlbersUsa)
+            .column('2012')
+            .unitId('fips')
+            .scale(1000)
+            .legend(true);
+
+        d3.csv('table.csv').then(data => {
+            map.draw(d3.select('#map').datum(data));
+        });
+    </script>
 </body>
 </html>
