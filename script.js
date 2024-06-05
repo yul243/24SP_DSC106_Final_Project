@@ -21,11 +21,10 @@ const tooltip = d3.select("body").append("div")
 
 // Load and process data
 d3.csv("Table.csv").then(function(data) {
-    // Map data to state fips code
+    // Map data to state names
     const incomeData = {};
     data.forEach(d => {
-        // Convert FIPS to a consistent format
-        incomeData[d.fips.padStart(5, '0')] = +d["2023"];
+        incomeData[d.State] = +d["2023"];
     });
 
     // Debugging: Log incomeData to verify
@@ -42,7 +41,7 @@ d3.csv("Table.csv").then(function(data) {
 
         // Debugging: Log state data to verify FIPS codes
         states.forEach(d => {
-            console.log("State ID:", d.id, "Name:", d.properties.name);
+            console.log("State Name:", d.properties.name);
         });
 
         svg.append("g")
@@ -52,9 +51,8 @@ d3.csv("Table.csv").then(function(data) {
             .attr("class", "state")
             .attr("d", path)
             .attr("fill", d => {
-                // Pad state IDs to match FIPS codes in incomeData
-                const value = incomeData[d.id.padStart(5, '0')];
-                console.log("FIPS:", d.id.padStart(5, '0'), "Value:", value); // Log each FIPS code and value
+                const value = incomeData[d.properties.name];
+                console.log("State:", d.properties.name, "Value:", value); // Log each state name and value
                 return value ? color(value) : "#ccc"; // Use default color if no data
             })
             .on("mouseover", function(event, d) {
@@ -62,15 +60,13 @@ d3.csv("Table.csv").then(function(data) {
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                // Pad state IDs to match FIPS codes in incomeData
-                const income = incomeData[d.id.padStart(5, '0')];
+                const income = incomeData[d.properties.name];
                 tooltip.html(d.properties.name + "<br>" + (income !== undefined ? income : "No data"))
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                // Pad state IDs to match FIPS codes in incomeData
-                const value = incomeData[d.id.padStart(5, '0')];
+                const value = incomeData[d.properties.name];
                 d3.select(this).style("fill", value ? color(value) : "#ccc");
                 tooltip.transition()
                     .duration(500)
