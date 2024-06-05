@@ -24,8 +24,12 @@ d3.csv("Table.csv").then(function(data) {
     // Map data to state fips code
     const incomeData = {};
     data.forEach(d => {
-        incomeData[d.fips] = +d["2023"];
+        // Ensure the FIPS code is correctly formatted as a string
+        incomeData[d.fips.padStart(5, '0')] = +d["2023"];
     });
+
+    // Debugging: Log incomeData to verify
+    console.log(incomeData);
 
     // Create color scale
     const color = d3.scaleQuantize()
@@ -41,7 +45,7 @@ d3.csv("Table.csv").then(function(data) {
             .attr("class", "state")
             .attr("d", path)
             .attr("fill", d => {
-                const value = incomeData[d.id];
+                const value = incomeData[d.id.padStart(5, '0')];
                 return value ? color(value) : "#ccc"; // Use default color if no data
             })
             .on("mouseover", function(event, d) {
@@ -49,13 +53,13 @@ d3.csv("Table.csv").then(function(data) {
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                const income = incomeData[d.id];
+                const income = incomeData[d.id.padStart(5, '0')];
                 tooltip.html(d.properties.name + "<br>" + (income !== undefined ? income : "No data"))
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                const value = incomeData[d.id];
+                const value = incomeData[d.id.padStart(5, '0')];
                 d3.select(this).style("fill", value ? color(value) : "#ccc");
                 tooltip.transition()
                     .duration(500)
