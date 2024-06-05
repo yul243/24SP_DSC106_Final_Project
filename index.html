@@ -1,54 +1,29 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-
-<!-- Load d3.js -->
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-
-<!-- Create an element where the map will take place -->
-<svg id="my_dataviz" width="960" height="600"></svg>
-<script>
-
-// The svg
-var svg = d3.select("#my_dataviz"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
-
-// Map and projection
-var path = d3.geoPath();
-var projection = d3.geoAlbersUsa()
-    .scale(1000)
-    .translate([width / 2, height / 2]);
-
-// Data and color scale
-var data = d3.map();
-var colorScale = d3.scaleThreshold()
-    .domain([10000, 20000, 30000, 40000, 50000, 60000, 70000])
-    .range(d3.schemeBlues[7]);
-
-// Load external data and boot
-d3.queue()
-    .defer(d3.json, "https://d3js.org/us-10m.v1.json")
-    .defer(d3.csv, "tables.csv", function(d) { data.set(d.fips, +d["2023"]); }) // Change '2023' to your desired year
-    .await(ready);
-
-function ready(error, us) {
-    if (error) throw error;
-
-    // Draw the map
-    svg.append("g")
-        .selectAll("path")
-        .data(topojson.feature(us, us.objects.states).features)
-        .enter()
-        .append("path")
-        // draw each state
-        .attr("d", path.projection(projection))
-        // set the color of each state
-        .attr("fill", function(d) {
-            d.total = data.get(d.id) || 0;
-            return colorScale(d.total);
-        });
-}
-
-</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US State GDP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .state {
+            fill: #ccc;
+            stroke: #fff;
+            stroke-width: 1;
+        }
+        .state:hover {
+            fill: orange;
+        }
+    </style>
+</head>
+<body>
+    <h1>US State GDP</h1>
+    <div id="map"></div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+    <script src="https://unpkg.com/us-atlas/states-10m.json"></script>
+    <script src="script.js"></script>
+</body>
+</html>
