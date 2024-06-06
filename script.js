@@ -74,28 +74,38 @@ d3.csv("Table.csv").then(function(data) {
             });
 
         // Add a legend
+        const legendWidth = 300;
+        const legendHeight = 20;
+        const legendMargin = {top: 10, right: 10, bottom: 30, left: 10};
+
         const legend = svg.append("g")
             .attr("class", "legend")
-            .attr("transform", `translate(${width - 250},${height - 250})`);
+            .attr("transform", `translate(${width - legendWidth - 50}, ${height - legendHeight - legendMargin.bottom})`);
 
+        // Create legend scale
         const legendScale = d3.scaleLinear()
-            .domain(d3.extent(data, d => +d["2023"]))
-            .range([0, 200]);
+            .domain(color.domain())
+            .range([0, legendWidth]);
 
-        const legendAxis = d3.axisRight(legendScale)
-            .tickSize(13)
+        // Create legend axis
+        const legendAxis = d3.axisBottom(legendScale)
+            .tickSize(legendHeight)
             .tickValues(color.range().map(d => color.invertExtent(d)[0]));
 
+        // Add colored rectangles for legend
         legend.selectAll("rect")
             .data(color.range().map(d => color.invertExtent(d)))
             .enter().append("rect")
-            .attr("width", 13)
-            .attr("height", 20)
-            .attr("x", 0)
-            .attr("y", d => legendScale(d[0]))
+            .attr("x", d => legendScale(d[0]))
+            .attr("y", 0)
+            .attr("width", d => legendScale(d[1]) - legendScale(d[0]))
+            .attr("height", legendHeight)
             .attr("fill", d => color(d[0]));
 
-        legend.call(legendAxis)
+        // Add legend axis
+        legend.append("g")
+            .attr("transform", `translate(0, ${legendHeight})`)
+            .call(legendAxis)
             .select(".domain")
             .remove();
     });
