@@ -72,5 +72,31 @@ d3.csv("Table.csv").then(function(data) {
                     .duration(500)
                     .style("opacity", 0);
             });
+
+        // Add a legend
+        const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(${width - 250},${height - 250})`);
+
+        const legendScale = d3.scaleLinear()
+            .domain(d3.extent(data, d => +d["2023"]))
+            .range([0, 200]);
+
+        const legendAxis = d3.axisRight(legendScale)
+            .tickSize(13)
+            .tickValues(color.range().map(d => color.invertExtent(d)[0]));
+
+        legend.selectAll("rect")
+            .data(color.range().map(d => color.invertExtent(d)))
+            .enter().append("rect")
+            .attr("width", 13)
+            .attr("height", 20)
+            .attr("x", 0)
+            .attr("y", d => legendScale(d[0]))
+            .attr("fill", d => color(d[0]));
+
+        legend.call(legendAxis)
+            .select(".domain")
+            .remove();
     });
 });
