@@ -100,7 +100,9 @@ d3.csv("Table.csv").then(function(data) {
             .attr("y", 0)
             .attr("width", d => legendScale(d[1]) - legendScale(d[0]))
             .attr("height", legendHeight)
-            .attr("fill", d => color(d[0]));
+            .attr("fill", d => color(d[0]))
+            .attr("stroke", "black") // Add black border
+            .attr("stroke-width", 1); // Set border width
 
         // Add legend axis
         legend.append("g")
