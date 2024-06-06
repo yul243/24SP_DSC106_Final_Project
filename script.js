@@ -32,9 +32,6 @@ d3.csv("Table.csv").then(function(data) {
         }
     });
 
-    // Debugging: Log incomeData to verify
-    console.log("Income Data:", incomeData);
-
     // Create color scale
     const color = d3.scaleQuantize()
         .range(d3.schemeBlues[9]);
@@ -56,8 +53,7 @@ d3.csv("Table.csv").then(function(data) {
                     .duration(200)
                     .style("opacity", .9);
                 const income = incomeData[currentYear][d.properties.name];
-                console.log(`State: ${d.properties.name}, Year: ${currentYear}, Income: ${income}`); // Debugging
-                tooltip.html(`${d.properties.name}<br>${income !== undefined ? `$${income}` : "No data"}`)
+                tooltip.html(`${d.properties.name}<br>${income ? `$${income}` : "No data"}`)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
