@@ -52,7 +52,8 @@ d3.csv("Table.csv").then(function(data) {
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                tooltip.html(d.properties.name)
+                const income = incomeData[currentYear][d.properties.name];
+                tooltip.html(`${d.properties.name}<br>${income ? `$${income}` : "No data"}`)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
