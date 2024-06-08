@@ -120,7 +120,10 @@ d3.csv("Table.csv").then(function(data) {
                     return value ? color(value) : "#ccc";
                 });
 
-            d3.select("#text-content").text(textContent[1998] || "No text available for this year.");
+            d3.select("#text-content")
+                .text(textContent[1998] || "No text available for this year.")
+                .style("opacity", 1); // Ensure text is visible on load
+
             d3.select("#year-indicator").text(1998);
         }
 
