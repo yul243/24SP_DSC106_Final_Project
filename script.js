@@ -97,7 +97,7 @@ d3.csv("Table.csv").then(function(data) {
             2020: "During the nation wide lock down from Covid-19 the nation's economy dipped. The pandemic caused a severe economic downturn, with high unemployment and significant GDP contraction.",
             2021: "We see the economy start to boom back up. The economy rebounded strongly with vaccines rollout and stimulus measures.",
             2022: "We see the economy drop slightly. Rising inflation and supply chain disruptions tempered growth.",
-            2023: "Job gains continued at a very strong pace in 2023, although down from the torrid rates seen in 2021 and 2022 immediately following the pandemic recession. <br> Monthly nonfarm payrolls grew by 232,000 per month on average in 2023, 55,000 more jobs per month than the average pace in 2018 and 2019."
+            2023: "Job gains continued at a very strong pace in 2023, although down from the torrid rates seen in 2021 and 2022 immediately following the pandemic recession. <br>Monthly nonfarm payrolls grew by 232,000 per month on average in 2023, 55,000 more jobs per month than the average pace in 2018 and 2019."
         };
 
         function updateMap(year) {
@@ -121,7 +121,7 @@ d3.csv("Table.csv").then(function(data) {
                 .duration(500)
                 .style("opacity", 0)
                 .on("end", function() {
-                    d3.select(this).text(textContent[year] || "No text available for this year.")
+                    d3.select(this).html(textContent[year] || "No text available for this year.")
                         .transition()
                         .duration(500)
                         .style("opacity", 1);
@@ -142,7 +142,7 @@ d3.csv("Table.csv").then(function(data) {
                 });
 
             d3.select("#text-content")
-                .text(textContent[1998] || "No text available for this year.")
+                .html(textContent[1998] || "No text available for this year.")
                 .style("opacity", 1); // Ensure text is visible on load
 
             d3.select("#year-indicator").text(1998);
