@@ -49,8 +49,12 @@ d3.csv("Table.csv").then(function(data) {
             .enter().append("path")
             .attr("class", "state")
             .attr("d", path)
-            .attr("fill", "#ccc")
+            .attr("fill", d => {
+                const value = incomeData[currentYear][d.properties.name];
+                return value ? color(value) : "#ccc";
+            })
             .on("mouseover", function(event, d) {
+                d3.select(this).style("fill", "orange");
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
@@ -60,7 +64,10 @@ d3.csv("Table.csv").then(function(data) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                d3.select(this).style("fill", d => color(incomeData[currentYear][d.properties.name]));
+                d3.select(this).style("fill", d => {
+                    const value = incomeData[currentYear][d.properties.name];
+                    return value ? color(value) : "#ccc";
+                });
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
