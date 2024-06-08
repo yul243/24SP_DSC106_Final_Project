@@ -99,6 +99,15 @@ d3.csv("Table.csv").then(function(data) {
             const index = Math.min(Math.floor(scrollY / sectionHeight), sections.size() - 1);
             const year = 1998 + index;
             updateMap(year);
+
+            sections.each(function(d, i) {
+                const sectionTop = this.getBoundingClientRect().top;
+                if (sectionTop < window.innerHeight / 2) {
+                    d3.select(this).classed("hidden", true);
+                } else {
+                    d3.select(this).classed("hidden", false);
+                }
+            });
         });
     });
 });
