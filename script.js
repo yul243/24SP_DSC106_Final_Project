@@ -91,7 +91,7 @@ d3.csv("Table.csv").then(function(data) {
         // Initialize map with 1998 data
         updateMap(1998);
 
-        // Update map on scroll
+        // Update map and progress bar on scroll
         d3.select(window).on("scroll", function() {
             const sections = d3.selectAll(".section");
             const scrollY = window.scrollY;
@@ -99,6 +99,9 @@ d3.csv("Table.csv").then(function(data) {
             const index = Math.min(Math.floor(scrollY / sectionHeight), sections.size() - 1);
             const year = 1998 + index;
             updateMap(year);
+
+            const progress = (scrollY / ((sections.size() - 1) * sectionHeight)) * 100;
+            d3.select("#progress-bar").style("width", progress + "%");
         });
     });
 });
