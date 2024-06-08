@@ -95,6 +95,22 @@
             height: 100%;
             background-color: #76c7c0;
         }
+        #text-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50vh;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 18px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -118,6 +134,7 @@
         <div id="progress-bar"></div>
     </div>
     <div id="map"></div>
+    <div id="text-container">Insert text here</div>
     <div class="section">1998</div>
     <div class="section">1999</div>
     <div class="section">2000</div>
