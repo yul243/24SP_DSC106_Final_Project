@@ -101,7 +101,7 @@
             left: 0;
             width: 100%;
             height: 50vh;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            background-color: #d3d3d3; /* Match the background color of the top half */
             z-index: 2;
             display: flex;
             justify-content: center;
@@ -110,6 +110,10 @@
             box-sizing: border-box;
             font-size: 18px;
             text-align: center;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #text-content {
+            opacity: 0;
         }
     </style>
 </head>
@@ -134,7 +138,9 @@
         <div id="progress-bar"></div>
     </div>
     <div id="map"></div>
-    <div id="text-container">Insert text here</div>
+    <div id="text-container">
+        <div id="text-content">Insert text here</div>
+    </div>
     <div class="section">1998</div>
     <div class="section">1999</div>
     <div class="section">2000</div>
