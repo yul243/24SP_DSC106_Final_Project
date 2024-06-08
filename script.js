@@ -93,21 +93,11 @@ d3.csv("Table.csv").then(function(data) {
 
         // Update map on scroll
         d3.select(window).on("scroll", function() {
-            const sections = d3.selectAll(".section");
             const scrollY = window.scrollY;
             const sectionHeight = window.innerHeight;
-            const index = Math.min(Math.floor(scrollY / sectionHeight), sections.size() - 1);
+            const index = Math.min(Math.floor(scrollY / sectionHeight), 2023 - 1998);
             const year = 1998 + index;
             updateMap(year);
-
-            sections.each(function(d, i) {
-                const sectionTop = this.getBoundingClientRect().top;
-                if (sectionTop < window.innerHeight / 2 && sectionTop > 0) {
-                    d3.select(this).classed("hidden", false);
-                } else {
-                    d3.select(this).classed("hidden", true);
-                }
-            });
         });
     });
 });
