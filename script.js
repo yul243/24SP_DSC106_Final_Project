@@ -80,7 +80,9 @@ d3.csv("Table.csv").then(function(data) {
         };
 
         function updateMap(year) {
+            if (currentYear === year) return; // Exit if the year hasn't changed
             currentYear = year;
+
             color.domain(d3.extent(Object.values(incomeData[year])));
 
             svg.selectAll(".state")
@@ -120,10 +122,7 @@ d3.csv("Table.csv").then(function(data) {
             const index = Math.min(Math.floor(scrollY / sectionHeight), sections.size() - 1);
             const year = 1998 + index;
 
-            // Only update if the year has changed
-            if (currentYear !== year) {
-                updateMap(year);
-            }
+            updateMap(year);
 
             const progress = (scrollY / ((sections.size() - 1) * sectionHeight)) * 100;
             d3.select("#progress-bar").style("width", progress + "%");
