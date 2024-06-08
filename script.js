@@ -51,12 +51,10 @@ d3.csv("Table.csv").then(function(data) {
             .attr("d", path)
             .attr("fill", "#ccc")
             .on("mouseover", function(event, d) {
-                d3.select(this).style("fill", "orange");
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
                 const income = incomeData[currentYear][d.properties.name];
-                console.log(`State: ${d.properties.name}, Year: ${currentYear}, Income: ${income}`); // Debugging
                 tooltip.html(`${d.properties.name}<br>${income !== undefined ? `$${income}` : "No data"}`)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
