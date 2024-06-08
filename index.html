@@ -65,14 +65,16 @@
         #timeline-container {
             position: fixed;
             top: 30px; /* Adjust as needed */
-            left: 0;
-            width: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%; /* Shrink the width to add padding */
             height: 30px;
             background-color: #e0e0e0;
             z-index: 2;
             display: flex;
             justify-content: space-between;
             padding: 0 20px;
+            box-sizing: border-box; /* Include padding in the width */
         }
         .timeline-label {
             font-size: 14px;
@@ -80,11 +82,13 @@
         #progress-bar-container {
             position: fixed;
             top: 50px; /* Adjust as needed */
-            left: 0;
-            width: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%; /* Match the width of the timeline */
             height: 10px;
             background-color: #e0e0e0;
             z-index: 2;
+            box-sizing: border-box; /* Include padding in the width */
         }
         #progress-bar {
             width: 0;
