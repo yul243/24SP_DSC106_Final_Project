@@ -39,6 +39,20 @@ d3.csv("Table.csv").then(function(data) {
     const color = d3.scaleQuantize()
         .range(d3.schemeBlues[9]);
 
+    // Update the legend with income ranges
+    function updateLegend() {
+        const legend = d3.select("#legend");
+        legend.selectAll("*").remove(); // Clear any existing legend items
+
+        const incomeRange = color.range().map(d => color.invertExtent(d));
+        incomeRange.forEach(range => {
+            legend.append("div")
+                .attr("class", "legend-item")
+                .style("background", `linear-gradient(to right, ${color(range[0])}, ${color(range[1])})`)
+                .text(`${Math.round(range[0])} - ${Math.round(range[1])}`);
+        });
+    }
+
     // Load and display the map
     d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
         const states = topojson.feature(us, us.objects.states).features;
@@ -86,6 +100,9 @@ d3.csv("Table.csv").then(function(data) {
             tooltip.transition()
                 .duration(500)
                 .style("opacity", 0);
+
+            // Update legend for the current year
+            updateLegend();
         }
 
         // Initialize map with 1998 data
