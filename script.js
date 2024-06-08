@@ -119,7 +119,11 @@ d3.csv("Table.csv").then(function(data) {
             const sectionHeight = window.innerHeight;
             const index = Math.min(Math.floor(scrollY / sectionHeight), sections.size() - 1);
             const year = 1998 + index;
-            updateMap(year);
+
+            // Only update if the year has changed
+            if (currentYear !== year) {
+                updateMap(year);
+            }
 
             const progress = (scrollY / ((sections.size() - 1) * sectionHeight)) * 100;
             d3.select("#progress-bar").style("width", progress + "%");
