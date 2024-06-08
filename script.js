@@ -70,6 +70,15 @@ d3.csv("Table.csv").then(function(data) {
 
         let currentYear = 1998;
 
+        // Map of text content for each year
+        const textContent = {
+            1998: "Insert text for 1998 here.",
+            1999: "Insert text for 1999 here.",
+            2000: "Insert text for 2000 here.",
+            // Add more years as needed
+            2023: "Insert text for 2023 here."
+        };
+
         function updateMap(year) {
             currentYear = year;
             color.domain(d3.extent(Object.values(incomeData[year])));
@@ -82,6 +91,9 @@ d3.csv("Table.csv").then(function(data) {
 
             // Update the year indicator
             d3.select("#year-indicator").text(year);
+
+            // Update the text container
+            d3.select("#text-container").text(textContent[year] || "No text available for this year.");
 
             tooltip.transition()
                 .duration(500)
