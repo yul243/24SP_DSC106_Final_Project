@@ -93,7 +93,16 @@ d3.csv("Table.csv").then(function(data) {
             d3.select("#year-indicator").text(year);
 
             // Update the text container
-            d3.select("#text-container").text(textContent[year] || "No text available for this year.");
+            d3.select("#text-content")
+                .style("opacity", 0)
+                .transition()
+                .duration(500)
+                .on("end", function() {
+                    d3.select(this).text(textContent[year] || "No text available for this year.")
+                        .transition()
+                        .duration(500)
+                        .style("opacity", 1);
+                });
 
             tooltip.transition()
                 .duration(500)
