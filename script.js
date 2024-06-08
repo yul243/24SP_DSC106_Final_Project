@@ -92,11 +92,11 @@ d3.csv("Table.csv").then(function(data) {
             // Update the year indicator
             d3.select("#year-indicator").text(year);
 
-            // Update the text container
+            // Update the text container with fade in/out effect
             d3.select("#text-content")
-                .style("opacity", 0)
                 .transition()
                 .duration(500)
+                .style("opacity", 0)
                 .on("end", function() {
                     d3.select(this).text(textContent[year] || "No text available for this year.")
                         .transition()
