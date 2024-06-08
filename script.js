@@ -112,7 +112,15 @@ d3.csv("Table.csv").then(function(data) {
         }
 
         // Initialize map with 1998 data
-        updateMap(1998);
+        color.domain(d3.extent(Object.values(incomeData[1998]))); // Ensure color domain is set for 1998
+        svg.selectAll(".state")
+            .attr("fill", d => {
+                const value = incomeData[1998][d.properties.name];
+                return value ? color(value) : "#ccc";
+            });
+
+        d3.select("#text-content").text(textContent[1998] || "No text available for this year.");
+        d3.select("#year-indicator").text(1998);
 
         // Update map and progress bar on scroll
         d3.select(window).on("scroll", function() {
