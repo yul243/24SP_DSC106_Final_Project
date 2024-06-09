@@ -65,10 +65,6 @@ function initializeMap(incomeData, color) {
             .enter().append("path")
             .attr("class", "state")
             .attr("d", path)
-            .attr("fill", d => {
-                const value = incomeData[1998][d.properties.name];
-                return value ? color(value) : "#ccc";
-            })
             .on("mouseover", function(event, d) {
                 d3.select(this).style("fill", "orange");
                 tooltip.transition()
@@ -80,7 +76,10 @@ function initializeMap(incomeData, color) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                updateStateColor(d3.select(this), d, incomeData, color);
+                d3.select(this).style("fill", function() {
+                    const value = incomeData[currentYear][d.properties.name];
+                    return value ? color(value) : "#ccc";
+                });
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -105,15 +104,8 @@ function initializeMap(incomeData, color) {
     });
 }
 
-// Function to update the color of a single state
-function updateStateColor(selection, d, incomeData, color) {
-    const value = incomeData[currentYear][d.properties.name];
-    selection.attr("fill", value ? color(value) : "#ccc");
-}
-
 // Function to update the map based on the current year
 function updateMap(incomeData, color, year) {
-    if (currentYear === year) return;
     currentYear = year;
 
     svg.selectAll(".state")
