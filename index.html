@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US Personal Income Per Capita</title>
+    <title>US State Personal Income Per Capita</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,34 +41,9 @@
             text-align: center;
             opacity: 0; /* Make sections invisible */
         }
-        #title {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 30px;
-            font-weight: bold;
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-            z-index: 4; /* Ensure the title is above the year indicator and map */
-        }
-        #subtext {
-            position: fixed;
-            top: 60px; /* Moved down to create more space between title and subtext */
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 16px;
-            background: white;
-            padding: 5px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-            z-index: 4; /* Ensure the subtext is above the year indicator and map */
-        }
         #map {
             position: fixed;
-            top: 180px; /* Adjusted to make room for the title and subtext */
+            top: 100px;
             left: 50%;
             transform: translateX(-50%);
             width: 960px;
@@ -77,7 +52,7 @@
         }
         #year-indicator {
             position: fixed;
-            top: 140px; /* Adjusted to make room for the title and subtext */
+            top: 60px; /* Adjust as needed */
             left: 50%;
             transform: translateX(-50%);
             font-size: 24px;
@@ -89,7 +64,7 @@
         }
         #timeline-container {
             position: fixed;
-            top: 100px; /* Adjusted to make room for the title and subtext */
+            top: 30px; /* Adjust as needed */
             left: 50%;
             transform: translateX(-50%);
             width: 80%; /* Shrink the width to add padding */
@@ -106,7 +81,7 @@
         }
         #progress-bar-container {
             position: fixed;
-            top: 120px; /* Adjusted to make room for the title and subtext */
+            top: 50px; /* Adjust as needed */
             left: 50%;
             transform: translateX(-50%);
             width: 80%; /* Match the width of the timeline */
@@ -142,20 +117,9 @@
         #text-content {
             opacity: 0;
         }
-        #source {
-            position: fixed;
-            top: 790px; /* Positioned under the map */
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            color: #555;
-            z-index: 2; /* Ensure the source text is above the text container */
-        }
     </style>
 </head>
 <body>
-    <div id="title">US Personal Income Per Capita</div>
-    <div id="subtext">by Noah Danan, Aile Banuelos, and Yujin Lee</div>
     <div id="timeline-container">
         <div class="timeline-label">1998</div>
         <div class="timeline-label">2000</div>
@@ -176,7 +140,6 @@
         <div id="progress-bar"></div>
     </div>
     <div id="map"></div>
-    <div id="source">Source: bea.gov</div>
     <div id="text-container">
         <div id="text-content">Insert text here</div>
     </div>
