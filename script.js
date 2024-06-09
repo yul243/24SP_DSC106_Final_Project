@@ -35,19 +35,14 @@ d3.csv("Table.csv").then(function(data) {
     // Debugging: Log incomeData to verify
     console.log("Income Data:", incomeData);
 
-    // Create a color scale that transitions from light blue to dark blue
-    const color = d3.scaleQuantize()
-        .range([
-            "#e0f3ff", // very light blue
-            "#cce6ff",
-            "#99ccff",
-            "#66b3ff",
-            "#3399ff",
-            "#007fff",
-            "#0066cc",
-            "#004c99",
-            "#003366"  // dark blue
-        ]);
+    // Define a consistent income range across all years
+    const minIncome = d3.min(data, d => d3.min(Object.values(d).slice(3)));
+    const maxIncome = d3.max(data, d => d3.max(Object.values(d).slice(3)));
+
+    // Create a color scale that transitions from light blue to dark blue based on the income range
+    const color = d3.scaleLinear()
+        .domain([minIncome, maxIncome])
+        .range(["#e0f3ff", "#003366"]);
 
     // Load and display the map
     d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
@@ -114,7 +109,7 @@ d3.csv("Table.csv").then(function(data) {
             if (currentYear === year) return; // Exit if the year hasn't changed
             currentYear = year;
 
-            color.domain(d3.extent(Object.values(incomeData[year])));
+            // No need to update color domain, as it is consistent
 
             svg.selectAll(".state")
                 .attr("fill", d => {
@@ -144,7 +139,6 @@ d3.csv("Table.csv").then(function(data) {
 
         // Initialize map with 1998 data
         function initializeMap() {
-            color.domain(d3.extent(Object.values(incomeData[1998])));
             svg.selectAll(".state")
                 .attr("fill", d => {
                     const value = incomeData[1998][d.properties.name];
