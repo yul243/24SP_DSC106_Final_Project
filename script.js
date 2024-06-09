@@ -81,7 +81,10 @@ function initializeMap(incomeData, color) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                updateStateColor(d3.select(this), d, incomeData, color);
+                d3.select(this).style("fill", d => {
+                    const value = incomeData[currentYear][d.properties.name];
+                    return value ? color(value) : "#ccc";
+                });
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -103,13 +106,6 @@ function initializeMap(incomeData, color) {
             const progress = (scrollY / ((sections.size() - 1) * sectionHeight)) * 100;
             d3.select("#progress-bar").style("width", progress + "%");
         });
-
-        // Set up an interval to periodically update the state colors
-        setInterval(function() {
-            statePaths.each(function(d) {
-                updateStateColor(d3.select(this), d, incomeData, color);
-            });
-        }, 1000); // Update every second
     });
 }
 
