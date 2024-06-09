@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #d3d3d3; /* Set background color to grey */
+            background-color: #d3d3d3;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -15,9 +15,6 @@
         .state {
             stroke: #fff;
             stroke-width: 1;
-        }
-        .state:hover {
-            fill: orange;
         }
         .tooltip {
             position: absolute;
@@ -30,7 +27,7 @@
             border: 0px;
             border-radius: 8px;
             pointer-events: none;
-            z-index: 10; /* Ensure the tooltip is above other elements */
+            z-index: 10;
         }
         .section {
             height: 100vh;
@@ -39,7 +36,7 @@
             align-items: center;
             font-size: 24px;
             text-align: center;
-            opacity: 0; /* Make sections invisible */
+            opacity: 0;
         }
         #title {
             position: fixed;
@@ -52,11 +49,11 @@
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-            z-index: 4; /* Ensure the title is above the year indicator and map */
+            z-index: 4;
         }
         #subtext {
             position: fixed;
-            top: 60px; /* Moved down to create more space between title and subtext */
+            top: 60px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 16px;
@@ -64,20 +61,20 @@
             padding: 5px;
             border-radius: 5px;
             box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-            z-index: 4; /* Ensure the subtext is above the year indicator and map */
+            z-index: 4;
         }
         #map {
             position: fixed;
-            top: 180px; /* Adjusted to make room for the title and subtext */
+            top: 120px;
             left: 50%;
             transform: translateX(-50%);
             width: 960px;
             height: 600px;
-            z-index: 2; /* Ensure the map is above the text container */
+            z-index: 2;
         }
         #year-indicator {
             position: fixed;
-            top: 140px; /* Adjusted to make room for the title and subtext */
+            top: 140px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 24px;
@@ -85,35 +82,35 @@
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-            z-index: 3; /* Ensure the year indicator is above the map */
+            z-index: 3;
         }
         #timeline-container {
             position: fixed;
-            top: 100px; /* Adjusted to make room for the title and subtext */
+            top: 100px;
             left: 50%;
             transform: translateX(-50%);
-            width: 80%; /* Shrink the width to add padding */
+            width: 80%;
             height: 30px;
             background-color: #e0e0e0;
-            z-index: 3; /* Ensure the timeline container is above the map */
+            z-index: 3;
             display: flex;
             justify-content: space-between;
             padding: 0 20px;
-            box-sizing: border-box; /* Include padding in the width */
+            box-sizing: border-box;
         }
         .timeline-label {
             font-size: 14px;
         }
         #progress-bar-container {
             position: fixed;
-            top: 120px; /* Adjusted to make room for the title and subtext */
+            top: 120px;
             left: 50%;
             transform: translateX(-50%);
-            width: 80%; /* Match the width of the timeline */
+            width: 80%;
             height: 10px;
             background-color: #e0e0e0;
-            z-index: 3; /* Ensure the progress bar is above the map */
-            box-sizing: border-box; /* Include padding in the width */
+            z-index: 3;
+            box-sizing: border-box;
         }
         #progress-bar {
             width: 0;
@@ -125,10 +122,10 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 960px; /* Match the width of the choropleth graph */
+            width: 960px;
             height: 50vh;
-            background-color: #d3d3d3; /* Match the background color of the top half */
-            z-index: 1; /* Ensure the text container is below the map */
+            background-color: #d3d3d3;
+            z-index: 1;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -137,19 +134,19 @@
             font-size: 18px;
             text-align: center;
             transition: opacity 0.5s ease-in-out;
-            pointer-events: none; /* Ensure the text container does not obstruct interactions with the map */
+            pointer-events: none;
         }
         #text-content {
             opacity: 0;
         }
         #source {
             position: fixed;
-            top: 790px; /* Positioned under the map */
+            top: 750px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 14px;
             color: #555;
-            z-index: 2; /* Ensure the source text is above the text container */
+            z-index: 2;
         }
     </style>
 </head>
@@ -208,7 +205,6 @@
     <div class="section">2023</div>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/topojson@3"></script>
-    <script src="https://unpkg.com/us-atlas/states-10m.json"></script>
     <script src="script.js"></script>
 </body>
 </html>
