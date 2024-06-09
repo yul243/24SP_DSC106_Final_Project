@@ -59,7 +59,7 @@ function initializeMap(incomeData, color) {
     d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
         const states = topojson.feature(us, us.objects.states).features;
 
-        const statePaths = svg.append("g")
+        svg.append("g")
             .selectAll("path")
             .data(states)
             .enter().append("path")
@@ -81,10 +81,7 @@ function initializeMap(incomeData, color) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                d3.select(this).style("fill", d => {
-                    const value = incomeData[currentYear][d.properties.name];
-                    return value ? color(value) : "#ccc";
-                });
+                d3.select(this).style("fill", d3.select(this).attr("fill-orig"));
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -107,12 +104,6 @@ function initializeMap(incomeData, color) {
             d3.select("#progress-bar").style("width", progress + "%");
         });
     });
-}
-
-// Function to update the color of a single state
-function updateStateColor(selection, d, incomeData, color) {
-    const value = incomeData[currentYear][d.properties.name];
-    selection.attr("fill", value ? color(value) : "#ccc");
 }
 
 // Function to update the map based on the current year
