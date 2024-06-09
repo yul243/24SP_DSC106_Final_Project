@@ -41,9 +41,22 @@
             text-align: center;
             opacity: 0; /* Make sections invisible */
         }
+        #title {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            font-weight: bold;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+            z-index: 4; /* Ensure the title is above the year indicator and map */
+        }
         #map {
             position: fixed;
-            top: 100px;
+            top: 150px; /* Adjusted to make room for the title */
             left: 50%;
             transform: translateX(-50%);
             width: 960px;
@@ -52,7 +65,7 @@
         }
         #year-indicator {
             position: fixed;
-            top: 60px; /* Adjust as needed */
+            top: 110px; /* Adjusted to make room for the title */
             left: 50%;
             transform: translateX(-50%);
             font-size: 24px;
@@ -64,7 +77,7 @@
         }
         #timeline-container {
             position: fixed;
-            top: 30px; /* Adjust as needed */
+            top: 80px; /* Adjusted to make room for the title */
             left: 50%;
             transform: translateX(-50%);
             width: 80%; /* Shrink the width to add padding */
@@ -81,7 +94,7 @@
         }
         #progress-bar-container {
             position: fixed;
-            top: 50px; /* Adjust as needed */
+            top: 100px; /* Adjusted to make room for the title */
             left: 50%;
             transform: translateX(-50%);
             width: 80%; /* Match the width of the timeline */
@@ -120,6 +133,7 @@
     </style>
 </head>
 <body>
+    <div id="title">US State Personal Income Per Capita</div>
     <div id="timeline-container">
         <div class="timeline-label">1998</div>
         <div class="timeline-label">2000</div>
