@@ -48,7 +48,7 @@
             transform: translateX(-50%);
             width: 960px;
             height: 600px;
-            z-index: 1;
+            z-index: 2; /* Ensure the map is above the text container */
         }
         #year-indicator {
             position: fixed;
@@ -60,7 +60,7 @@
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-            z-index: 2;
+            z-index: 3; /* Ensure the year indicator is above the map */
         }
         #timeline-container {
             position: fixed;
@@ -70,7 +70,7 @@
             width: 80%; /* Shrink the width to add padding */
             height: 30px;
             background-color: #e0e0e0;
-            z-index: 2;
+            z-index: 3; /* Ensure the timeline container is above the map */
             display: flex;
             justify-content: space-between;
             padding: 0 20px;
@@ -87,7 +87,7 @@
             width: 80%; /* Match the width of the timeline */
             height: 10px;
             background-color: #e0e0e0;
-            z-index: 2;
+            z-index: 3; /* Ensure the progress bar is above the map */
             box-sizing: border-box; /* Include padding in the width */
         }
         #progress-bar {
@@ -103,7 +103,7 @@
             width: 960px; /* Match the width of the choropleth graph */
             height: 50vh;
             background-color: #d3d3d3; /* Match the background color of the top half */
-            z-index: 2;
+            z-index: 1; /* Ensure the text container is below the map */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -112,6 +112,7 @@
             font-size: 18px;
             text-align: center;
             transition: opacity 0.5s ease-in-out;
+            pointer-events: none; /* Ensure the text container does not obstruct interactions with the map */
         }
         #text-content {
             opacity: 0;
