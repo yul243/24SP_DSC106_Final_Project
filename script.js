@@ -70,6 +70,7 @@ function initializeMap(incomeData, color) {
                 return value ? color(value) : "#ccc";
             })
             .on("mouseover", function(event, d) {
+                d3.select(this).attr("original-fill", d3.select(this).attr("fill"));
                 d3.select(this).style("fill", "orange");
                 tooltip.transition()
                     .duration(200)
@@ -80,7 +81,7 @@ function initializeMap(incomeData, color) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                updateStateColor(d3.select(this), d, incomeData, color);
+                d3.select(this).style("fill", d3.select(this).attr("original-fill"));
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
