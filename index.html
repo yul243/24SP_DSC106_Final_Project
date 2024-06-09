@@ -151,11 +151,25 @@
             color: #555;
             z-index: 2; /* Ensure the source text is above the text container */
         }
+        #presentation-link {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 14px;
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+            z-index: 4; /* Ensure the link is above other elements */
+        }
     </style>
 </head>
 <body>
     <div id="title">US Personal Income Per Capita</div>
     <div id="subtext">by Noah Danan, Aile Banuelos, and Yujin Lee</div>
+    <div id="presentation-link">
+        <a href="https://youtu.be/7jEXgLd7Zao" target="_blank">Presentation Link</a>
+    </div>
     <div id="timeline-container">
         <div class="timeline-label">1998</div>
         <div class="timeline-label">2000</div>
