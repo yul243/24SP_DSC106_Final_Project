@@ -10,10 +10,6 @@
             background-color: #d3d3d3; /* Set background color to grey */
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             overflow-x: hidden;
         }
         .state {
@@ -34,6 +30,7 @@
             border: 0px;
             border-radius: 8px;
             pointer-events: none;
+            z-index: 10; /* Ensure the tooltip is above other elements */
         }
         .section {
             height: 100vh;
@@ -42,15 +39,33 @@
             align-items: center;
             font-size: 24px;
             text-align: center;
+            opacity: 0; /* Make sections invisible */
         }
         #map {
-            position: relative;
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
             width: 960px;
             height: 600px;
+            z-index: 1;
+        }
+        #year-indicator {
+            position: fixed;
+            top: 10px; /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+            z-index: 2;
         }
     </style>
 </head>
 <body>
+    <div id="year-indicator">1998</div>
     <div id="map"></div>
     <div class="section">1998</div>
     <div class="section">1999</div>
