@@ -14,7 +14,7 @@ function initializeMap(incomeData, color) {
                 return value ? color(value) : "#ccc";
             })
             .on("mouseover", function(event, d) {
-                d3.select(this).classed("hovered", true);
+                d3.select(this).attr("data-original-fill", d3.select(this).attr("fill"));
                 d3.select(this).style("fill", "orange");
                 tooltip.transition()
                     .duration(200)
@@ -25,9 +25,7 @@ function initializeMap(incomeData, color) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                d3.select(this).classed("hovered", false);
-                const value = incomeData[currentYear][d.properties.name];
-                d3.select(this).style("fill", value ? color(value) : "#ccc");
+                d3.select(this).style("fill", d3.select(this).attr("data-original-fill"));
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -61,9 +59,7 @@ function updateMap(incomeData, color, year) {
         .each(function(d) {
             const value = incomeData[year][d.properties.name];
             const fillColor = value ? color(value) : "#ccc";
-            if (!d3.select(this).classed("hovered")) {
-                d3.select(this).attr("fill", fillColor);
-            }
+            d3.select(this).attr("fill", fillColor).attr("data-original-fill", fillColor);
         });
 
     d3.select("#year-indicator").text(year);
