@@ -54,7 +54,10 @@ d3.csv("Table.csv").then(function(data) {
             .enter().append("path")
             .attr("class", "state")
             .attr("d", path)
-            .attr("fill", d => color(incomeData[1998][d.properties.name])) // Set initial color
+            .attr("fill", d => {
+                const value = incomeData[1998][d.properties.name];
+                return value ? color(value) : "#ccc";
+            }) // Set initial color
             .on("mouseover", function(event, d) {
                 d3.select(this).style("fill", "orange");
                 tooltip.transition()
@@ -67,7 +70,10 @@ d3.csv("Table.csv").then(function(data) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                d3.select(this).style("fill", d => color(incomeData[currentYear][d.properties.name]));
+                d3.select(this).style("fill", d => {
+                    const value = incomeData[currentYear][d.properties.name];
+                    return value ? color(value) : "#ccc";
+                });
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -108,8 +114,6 @@ d3.csv("Table.csv").then(function(data) {
         function updateMap(year) {
             if (currentYear === year) return; // Exit if the year hasn't changed
             currentYear = year;
-
-            // No need to update color domain, as it is consistent
 
             svg.selectAll(".state")
                 .attr("fill", d => {
