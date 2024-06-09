@@ -43,7 +43,7 @@
         }
         #map {
             position: fixed;
-            top: 100px;
+            top: 50px;
             left: 50%;
             transform: translateX(-50%);
             width: 960px;
@@ -52,7 +52,7 @@
         }
         #year-indicator {
             position: fixed;
-            top: 60px; /* Adjust as needed */
+            top: 10px; /* Adjust as needed */
             left: 50%;
             transform: translateX(-50%);
             font-size: 24px;
@@ -62,85 +62,28 @@
             box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
             z-index: 2;
         }
-        #timeline-container {
-            position: fixed;
-            top: 30px; /* Adjust as needed */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%; /* Shrink the width to add padding */
-            height: 30px;
-            background-color: #e0e0e0;
-            z-index: 2;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-            box-sizing: border-box; /* Include padding in the width */
-        }
-        .timeline-label {
-            font-size: 14px;
-        }
         #progress-bar-container {
             position: fixed;
             top: 50px; /* Adjust as needed */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%; /* Match the width of the timeline */
+            left: 0;
+            width: 100%;
             height: 10px;
             background-color: #e0e0e0;
             z-index: 2;
-            box-sizing: border-box; /* Include padding in the width */
         }
         #progress-bar {
             width: 0;
             height: 100%;
             background-color: #76c7c0;
         }
-        #text-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50vh;
-            background-color: #d3d3d3; /* Match the background color of the top half */
-            z-index: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            font-size: 18px;
-            text-align: center;
-            transition: opacity 0.5s ease-in-out;
-        }
-        #text-content {
-            opacity: 0;
-        }
     </style>
 </head>
 <body>
-    <div id="timeline-container">
-        <div class="timeline-label">1998</div>
-        <div class="timeline-label">2000</div>
-        <div class="timeline-label">2002</div>
-        <div class="timeline-label">2004</div>
-        <div class="timeline-label">2006</div>
-        <div class="timeline-label">2008</div>
-        <div class="timeline-label">2010</div>
-        <div class="timeline-label">2012</div>
-        <div class="timeline-label">2014</div>
-        <div class="timeline-label">2016</div>
-        <div class="timeline-label">2018</div>
-        <div class="timeline-label">2020</div>
-        <div class="timeline-label">2022</div>
-    </div>
     <div id="year-indicator">1998</div>
     <div id="progress-bar-container">
         <div id="progress-bar"></div>
     </div>
     <div id="map"></div>
-    <div id="text-container">
-        <div id="text-content">Insert text here</div>
-    </div>
     <div class="section">1998</div>
     <div class="section">1999</div>
     <div class="section">2000</div>
