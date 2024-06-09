@@ -76,10 +76,9 @@ d3.csv("Table.csv").then(function(data) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                d3.select(this).style("fill", d => {
-                    const value = incomeData[currentYear][d.properties.name];
-                    return value ? color(value) : "#ccc";
-                });
+                // Reset color based on current year's data
+                const value = incomeData[currentYear][d.properties.name];
+                d3.select(this).style("fill", value ? color(value) : "#ccc");
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
