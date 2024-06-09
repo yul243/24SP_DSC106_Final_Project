@@ -65,6 +65,10 @@ function initializeMap(incomeData, color) {
             .enter().append("path")
             .attr("class", "state")
             .attr("d", path)
+            .attr("fill", d => {
+                const value = incomeData[1998][d.properties.name];
+                return value ? color(value) : "#ccc";
+            })
             .on("mouseover", function(event, d) {
                 d3.select(this).style("fill", "orange");
                 tooltip.transition()
@@ -76,10 +80,7 @@ function initializeMap(incomeData, color) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                d3.select(this).style("fill", function() {
-                    const value = incomeData[currentYear][d.properties.name];
-                    return value ? color(value) : "#ccc";
-                });
+                updateStateColor(d3.select(this), d, incomeData, color);
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -101,11 +102,25 @@ function initializeMap(incomeData, color) {
             const progress = (scrollY / ((sections.size() - 1) * sectionHeight)) * 100;
             d3.select("#progress-bar").style("width", progress + "%");
         });
+
+        // Set up an interval to periodically update the state colors
+        setInterval(function() {
+            svg.selectAll(".state").each(function(d) {
+                updateStateColor(d3.select(this), d, incomeData, color);
+            });
+        }, 1000); // Update every second
     });
+}
+
+// Function to update the color of a single state
+function updateStateColor(selection, d, incomeData, color) {
+    const value = incomeData[currentYear][d.properties.name];
+    selection.attr("fill", value ? color(value) : "#ccc");
 }
 
 // Function to update the map based on the current year
 function updateMap(incomeData, color, year) {
+    if (currentYear === year) return;
     currentYear = year;
 
     svg.selectAll(".state")
