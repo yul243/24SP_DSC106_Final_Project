@@ -82,6 +82,7 @@ d3.csv("Table.csv").then(function(data) {
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
+                updateMap(currentYear); // Ensure map is updated to current year's data
             });
 
         let currentYear = 1998;
