@@ -35,18 +35,18 @@ d3.csv("Table.csv").then(function(data) {
     // Debugging: Log incomeData to verify
     console.log("Income Data:", incomeData);
 
-    // Create darker color scale
+    // Create a color scale that transitions from light blue to dark blue
     const color = d3.scaleQuantize()
         .range([
-            "#f7fbff",
-            "#deebf7",
-            "#c6dbef",
-            "#9ecae1",
-            "#6baed6",
-            "#4292c6",
-            "#2171b5",
-            "#08519c",
-            "#08306b"
+            "#e0f3ff", // very light blue
+            "#cce6ff",
+            "#99ccff",
+            "#66b3ff",
+            "#3399ff",
+            "#007fff",
+            "#0066cc",
+            "#004c99",
+            "#003366"  // dark blue
         ]);
 
     // Load and display the map
