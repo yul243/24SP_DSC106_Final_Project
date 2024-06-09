@@ -142,6 +142,15 @@
         #text-content {
             opacity: 0;
         }
+        #source {
+            position: fixed;
+            top: 790px; /* Positioned under the map */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: #555;
+            z-index: 2; /* Ensure the source text is above the text container */
+        }
     </style>
 </head>
 <body>
@@ -167,6 +176,7 @@
         <div id="progress-bar"></div>
     </div>
     <div id="map"></div>
+    <div id="source">Source: bea.gov</div>
     <div id="text-container">
         <div id="text-content">Insert text here</div>
     </div>
