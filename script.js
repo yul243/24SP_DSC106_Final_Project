@@ -121,8 +121,6 @@ d3.csv("Table.csv").then(function(data) {
             if (currentYear === year) return; // Exit if the year hasn't changed
             currentYear = year;
 
-            color.domain([20000, 100000]); // Ensure domain is consistent
-
             svg.selectAll(".state")
                 .attr("fill", d => {
                     const value = incomeData[year][d.properties.name];
