@@ -106,6 +106,12 @@ function initializeMap(incomeData, color) {
     });
 }
 
+// Function to update the color of a single state
+function updateStateColor(selection, d, incomeData, color) {
+    const value = incomeData[currentYear][d.properties.name];
+    selection.attr("fill", value ? color(value) : "#ccc");
+}
+
 // Function to update the map based on the current year
 function updateMap(incomeData, color, year) {
     if (currentYear === year) return;
