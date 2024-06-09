@@ -70,6 +70,8 @@ function initializeMap(incomeData, color) {
                 return value ? color(value) : "#ccc";
             })
             .on("mouseover", function(event, d) {
+                d3.select(this).attr("fill-orig", d3.select(this).attr("fill"));
+                d3.select(this).style("fill", "orange");
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
@@ -79,6 +81,7 @@ function initializeMap(incomeData, color) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
+                d3.select(this).style("fill", d3.select(this).attr("fill-orig"));
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -103,16 +106,23 @@ function initializeMap(incomeData, color) {
     });
 }
 
+// Function to update the color of a single state
+function updateStateColor(selection, d, incomeData, color) {
+    const value = incomeData[currentYear][d.properties.name];
+    selection.attr("fill", value ? color(value) : "#ccc");
+}
+
 // Function to update the map based on the current year
 function updateMap(incomeData, color, year) {
     if (currentYear === year) return;
     currentYear = year;
 
     svg.selectAll(".state")
-        .each(function(d) {
+        .transition()
+        .duration(500)
+        .attr("fill", d => {
             const value = incomeData[year][d.properties.name];
-            const fillColor = value ? color(value) : "#ccc";
-            d3.select(this).attr("fill", fillColor);
+            return value ? color(value) : "#ccc";
         });
 
     d3.select("#year-indicator").text(year);
