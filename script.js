@@ -35,14 +35,20 @@ d3.csv("Table.csv").then(function(data) {
     // Debugging: Log incomeData to verify
     console.log("Income Data:", incomeData);
 
-    // Define a consistent income range across all years
-    const minIncome = d3.min(data, d => d3.min(Object.values(d).slice(3)));
-    const maxIncome = d3.max(data, d => d3.max(Object.values(d).slice(3)));
-
-    // Create a color scale that transitions from light blue to dark blue based on the income range
-    const color = d3.scaleLinear()
-        .domain([minIncome, maxIncome])
-        .range(["#e0f3ff", "#003366"]);
+    // Create a color scale that transitions from light blue to dark blue
+    const color = d3.scaleQuantize()
+        .domain([20000, 100000]) // Set domain for personal income per capita
+        .range([
+            "#e0f3ff", // very light blue
+            "#cce6ff",
+            "#99ccff",
+            "#66b3ff",
+            "#3399ff",
+            "#007fff",
+            "#0066cc",
+            "#004c99",
+            "#003366"  // dark blue
+        ]);
 
     // Load and display the map
     d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
@@ -114,6 +120,8 @@ d3.csv("Table.csv").then(function(data) {
         function updateMap(year) {
             if (currentYear === year) return; // Exit if the year hasn't changed
             currentYear = year;
+
+            color.domain([20000, 100000]); // Ensure domain is consistent
 
             svg.selectAll(".state")
                 .attr("fill", d => {
