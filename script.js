@@ -35,19 +35,18 @@ d3.csv("Table.csv").then(function(data) {
     // Debugging: Log incomeData to verify
     console.log("Income Data:", incomeData);
 
-    // Create a color scale that transitions from light blue to dark blue
+    // Create darker color scale
     const color = d3.scaleQuantize()
-        .domain([20000, 100000]) // Set domain for personal income per capita
         .range([
-            "#e0f3ff", // very light blue
-            "#cce6ff",
-            "#99ccff",
-            "#66b3ff",
-            "#3399ff",
-            "#007fff",
-            "#0066cc",
-            "#004c99",
-            "#003366"  // dark blue
+            "#f7fbff",
+            "#deebf7",
+            "#c6dbef",
+            "#9ecae1",
+            "#6baed6",
+            "#4292c6",
+            "#2171b5",
+            "#08519c",
+            "#08306b"
         ]);
 
     // Load and display the map
@@ -60,10 +59,7 @@ d3.csv("Table.csv").then(function(data) {
             .enter().append("path")
             .attr("class", "state")
             .attr("d", path)
-            .attr("fill", d => {
-                const value = incomeData[1998][d.properties.name];
-                return value ? color(value) : "#ccc";
-            }) // Set initial color
+            .attr("fill", "#ccc")
             .on("mouseover", function(event, d) {
                 d3.select(this).style("fill", "orange");
                 tooltip.transition()
@@ -76,13 +72,10 @@ d3.csv("Table.csv").then(function(data) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                // Reset color based on current year's data
-                const value = incomeData[currentYear][d.properties.name];
-                d3.select(this).style("fill", value ? color(value) : "#ccc");
+                d3.select(this).style("fill", d => color(incomeData[currentYear][d.properties.name]));
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
-                updateMap(currentYear); // Ensure map is updated to current year's data
             });
 
         let currentYear = 1998;
@@ -121,6 +114,8 @@ d3.csv("Table.csv").then(function(data) {
             if (currentYear === year) return; // Exit if the year hasn't changed
             currentYear = year;
 
+            color.domain(d3.extent(Object.values(incomeData[year])));
+
             svg.selectAll(".state")
                 .attr("fill", d => {
                     const value = incomeData[year][d.properties.name];
@@ -149,6 +144,7 @@ d3.csv("Table.csv").then(function(data) {
 
         // Initialize map with 1998 data
         function initializeMap() {
+            color.domain(d3.extent(Object.values(incomeData[1998])));
             svg.selectAll(".state")
                 .attr("fill", d => {
                     const value = incomeData[1998][d.properties.name];
