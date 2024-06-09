@@ -35,9 +35,19 @@ d3.csv("Table.csv").then(function(data) {
     // Debugging: Log incomeData to verify
     console.log("Income Data:", incomeData);
 
-    // Create color scale
+    // Create darker color scale
     const color = d3.scaleQuantize()
-        .range(d3.schemeBlues[9]);
+        .range([
+            "#f7fbff",
+            "#deebf7",
+            "#c6dbef",
+            "#9ecae1",
+            "#6baed6",
+            "#4292c6",
+            "#2171b5",
+            "#08519c",
+            "#08306b"
+        ]);
 
     // Load and display the map
     d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
