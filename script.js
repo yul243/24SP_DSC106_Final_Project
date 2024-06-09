@@ -102,13 +102,6 @@ function initializeMap(incomeData, color) {
             const progress = (scrollY / ((sections.size() - 1) * sectionHeight)) * 100;
             d3.select("#progress-bar").style("width", progress + "%");
         });
-
-        // Set up an interval to periodically update the state colors
-        setInterval(function() {
-            svg.selectAll(".state").each(function(d) {
-                updateStateColor(d3.select(this), d, incomeData, color);
-            });
-        }, 1000); // Update every second
     });
 }
 
