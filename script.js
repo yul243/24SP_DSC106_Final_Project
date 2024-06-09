@@ -59,7 +59,7 @@ function initializeMap(incomeData, color) {
     d3.json("https://unpkg.com/us-atlas/states-10m.json").then(function(us) {
         const states = topojson.feature(us, us.objects.states).features;
 
-        svg.append("g")
+        const statePaths = svg.append("g")
             .selectAll("path")
             .data(states)
             .enter().append("path")
@@ -81,7 +81,7 @@ function initializeMap(incomeData, color) {
                     .style("top", (event.pageY - 28) + "px");
             })
             .on("mouseout", function(event, d) {
-                d3.select(this).style("fill", d3.select(this).attr("fill-orig"));
+                updateStateColor(d3.select(this), d, incomeData, color);
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -103,6 +103,13 @@ function initializeMap(incomeData, color) {
             const progress = (scrollY / ((sections.size() - 1) * sectionHeight)) * 100;
             d3.select("#progress-bar").style("width", progress + "%");
         });
+
+        // Set up an interval to periodically update the state colors
+        setInterval(function() {
+            statePaths.each(function(d) {
+                updateStateColor(d3.select(this), d, incomeData, color);
+            });
+        }, 1000); // Update every second
     });
 }
 
